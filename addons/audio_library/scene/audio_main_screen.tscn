@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://43xh2xt44mif"]
+
+[ext_resource type="Script" uid="uid://d01mfad5o1rvu" path="res://addons/audio_library/scene/audio_main_screen.gd" id="1_cxy2f"]
+[ext_resource type="Texture2D" uid="uid://cyblne0g5trmb" path="res://addons/audio_library/assets/search.svg" id="2_0d350"]
+[ext_resource type="Texture2D" uid="uid://b5pgn2f1uxvgo" path="res://addons/audio_library/assets/folder.svg" id="3_0u6m8"]
+[ext_resource type="Texture2D" uid="uid://box7le6yktdgx" path="res://addons/audio_library/assets/back.svg" id="4_v7umx"]
+[ext_resource type="Texture2D" uid="uid://dvenotfttnmqq" path="res://addons/audio_library/assets/reload.svg" id="5_41hot"]
+
+[node name="AudioMainScreen" type="MarginContainer" unique_id=1925864625]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+script = ExtResource("1_cxy2f")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=549839621]
+layout_mode = 2
+
+[node name="Top" type="HBoxContainer" parent="VBoxContainer" unique_id=409431304]
+layout_mode = 2
+
+[node name="Search" type="LineEdit" parent="VBoxContainer/Top" unique_id=243695577]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+placeholder_text = "Search"
+emoji_menu_enabled = false
+right_icon = ExtResource("2_0d350")
+
+[node name="OpenFolder" type="Button" parent="VBoxContainer/Top" unique_id=1532708913]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(31, 0)
+layout_mode = 2
+icon = ExtResource("3_0u6m8")
+icon_alignment = 1
+
+[node name="Back" type="Button" parent="VBoxContainer/Top" unique_id=1866561692]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(31, 0)
+layout_mode = 2
+icon = ExtResource("4_v7umx")
+icon_alignment = 1
+
+[node name="Reload" type="Button" parent="VBoxContainer/Top" unique_id=1632339845]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(31, 0)
+layout_mode = 2
+icon = ExtResource("5_41hot")
+icon_alignment = 1
+
+[node name="Items" type="Tree" parent="VBoxContainer" unique_id=1648448780]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="AudioPlayer" type="AudioStreamPlayer" parent="." unique_id=427356529]
+unique_name_in_owner = true

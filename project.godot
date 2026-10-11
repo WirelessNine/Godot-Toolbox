@@ -14,10 +14,27 @@ config/name="Godot Toolbox"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
+[debug]
+
+gdscript/warnings/untyped_declaration=2
+gdscript/warnings/inferred_declaration=2
+
 [display]
 
-window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+window/size/viewport_width=960
+window/size/viewport_height=540
+window/size/mode=2
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/GDQuest_GDScript_formatter/plugin.cfg", "res://addons/audio_library/plugin.cfg")
+
+[file_customization]
+
+folder_colors={
+"res://addons/": "yellow",
+"res://test/": "gray"
+}
 
 [physics]
 
@@ -26,3 +43,7 @@ window/stretch/aspect="expand"
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+
+[wireless_nine]
+
+library_path="C:\\Users\\costa\\Music\\SFX"
