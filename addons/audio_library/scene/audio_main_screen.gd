@@ -15,12 +15,12 @@ enum Type {
 
 const LIBRARY_PATH_SETTING: String = "wireless_nine/library_path"
 
-const ADD_ICON = preload("uid://d1mrcuem5delc")
-const AUDIO_ICON = preload("uid://bucxxc42ahk6f")
-const FOLDER_ICON = preload("uid://b5pgn2f1uxvgo")
-const OPEN_ICON = preload("uid://i6ro7lcdqkhv")
-const PLAY_ICON = preload("uid://v65d3ax1dpqc")
-const STOP_ICON = preload("uid://cpwva5vpxr3qj")
+const ADD_ICON: Texture2D = preload("uid://d1mrcuem5delc")
+const AUDIO_ICON: Texture2D = preload("uid://bucxxc42ahk6f")
+const FOLDER_ICON: Texture2D = preload("uid://b5pgn2f1uxvgo")
+const OPEN_ICON: Texture2D = preload("uid://i6ro7lcdqkhv")
+const PLAY_ICON: Texture2D = preload("uid://v65d3ax1dpqc")
+const STOP_ICON: Texture2D = preload("uid://cpwva5vpxr3qj")
 
 var playing_item: TreeItem
 
@@ -30,7 +30,6 @@ var dir_access: DirAccess
 var dir_access_path: String
 
 var library_path: String
-
 var found_dirs: PackedStringArray
 var found_files: PackedStringArray
 
@@ -271,7 +270,7 @@ func _on_items_tree_gui_input(event: InputEvent) -> void:
 
 	var path: String = item.get_meta(&"path")
 	var type: Type = item.get_meta(&"type")
-	
+
 	match type:
 		Type.DIRECTORY:
 			open_dir(path)
