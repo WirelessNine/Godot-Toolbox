@@ -36,7 +36,7 @@ window/size/mode=2
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/GDQuest_GDScript_formatter/plugin.cfg", "res://addons/kanban_tasks/plugin.cfg", "res://addons/ui_expansion/plugin.cfg")
+enabled=PackedStringArray("res://addons/GDQuest_GDScript_formatter/plugin.cfg", "res://addons/kanban_tasks/plugin.cfg", "res://addons/node_pool/plugin.cfg", "res://addons/ui_expansion/plugin.cfg")
 
 [file_customization]
 

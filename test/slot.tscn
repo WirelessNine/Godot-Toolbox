@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://cpeesqbdlitxj"]
+
+[ext_resource type="Script" uid="uid://dh0rty4jsyg5a" path="res://test/slot.gd" id="1_0rlhu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4s6nj"]
+bg_color = Color(0.09, 0.09, 0.09, 0.6431373)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="Slot" type="Label" unique_id=1056843069]
+custom_minimum_size = Vector2(80, 80)
+offset_right = 73.0
+offset_bottom = 69.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_4s6nj")
+text = "Index
+1"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("1_0rlhu")

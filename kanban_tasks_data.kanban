@@ -11,8 +11,7 @@
 			"uuid": "64bafa31-a4a7-48e3-beec-5fa07c8c9ec6",
 			"title": "Todo",
 			"tasks": [
-				"c60f59a0-43c7-4d1e-8ea3-185443a114f3",
-				"20bdf922-7528-4b02-8773-c80a04f97fca"
+				"c60f59a0-43c7-4d1e-8ea3-185443a114f3"
 			]
 		},
 		{
@@ -24,7 +23,8 @@
 			"uuid": "c05eb137-62c9-471d-8b09-3dbb3b28ef18",
 			"title": "Done",
 			"tasks": [
-				"e780b98c-7b53-48be-b6e4-87740721c4e9"
+				"e780b98c-7b53-48be-b6e4-87740721c4e9",
+				"20bdf922-7528-4b02-8773-c80a04f97fca"
 			]
 		}
 	],
@@ -38,7 +38,7 @@
 		},
 		{
 			"uuid": "20bdf922-7528-4b02-8773-c80a04f97fca",
-			"title": "Add ObjectPooler plugin",
+			"title": "Add ScenePool plugin",
 			"description": "",
 			"category": "b4928ccb-ed64-4884-bcc7-1395c2abd826",
 			"steps": []
