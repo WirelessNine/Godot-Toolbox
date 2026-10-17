@@ -1,34 +1,8 @@
-@icon("uid://c3qymh533eol3")
 @abstract
-class_name UIAnimation
 extends Object
 ##Singleton for reusable animations for UI.
 
 const META_NAME: StringName = &"tween"
-
-enum Type {
-	NONE = 0,
-	FALL = 1,
-	SLIDE = 2,
-	FADE_DOWN = 3,
-}
-
-
-static func play_animation(type: Type, node: Control, reverse: bool, override: bool = true) -> void:
-	if not override and node_is_playing(node):
-		return
-
-	match type:
-		Type.NONE:
-			play_none(node, reverse)
-		Type.FALL:
-			play_fall(node, reverse)
-		Type.SLIDE:
-			play_slide(node, reverse)
-		Type.FADE_DOWN:
-			play_fade_down(node, reverse)
-		_:
-			push_error("Animation function for ", type, " is missing!")
 
 
 static func play_none(node: Control, reverse: bool) -> void:
@@ -43,7 +17,7 @@ static func play_fall(node: Control, reverse: bool) -> void:
 		Tween.EASE_OUT
 	)
 	node.offset_transform_enabled = true
-
+	
 	node.modulate.a = 0.0 if not reverse else 1.0
 	node.offset_transform_scale = Vector2(1.1, 1.1) if not reverse else Vector2(1.0, 1.0)
 

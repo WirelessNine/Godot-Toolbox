@@ -9,17 +9,10 @@ func _enter_tree() -> void:
 		preload("uid://rxwty6cd03ab"),
 		preload("uid://lxuugoybnvfh"),
 	)
-	add_custom_type(
-		"UIAnimation",
-		"Object",
-		preload("uid://d24df1ctfr77l"),
-		preload("uid://c3qymh533eol3"),
-	)
 
 
 func _exit_tree() -> void:
 	remove_custom_type("Menu")
-	remove_custom_type("UIAnimation")
 
 
 func _enable_plugin() -> void:

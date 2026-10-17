@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cybuxqt0owxwf"]
+
+[ext_resource type="Script" uid="uid://d25onue4fgmam" path="res://test/freak_ui.gd" id="1_ud4v6"]
+[ext_resource type="Script" uid="uid://d0vdnenvtkbqn" path="res://test/test_static.gd" id="2_qn3ew"]
+
+[node name="FreakUI" type="Control" unique_id=212869596]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ud4v6")
+pack = ExtResource("2_qn3ew")
+metadata/_edit_lock_ = true
