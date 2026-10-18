@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://ddiy46s8pndwo" path="res://addons/ui_expansion/objects/tween/tween_step.gd" id="2_emc38"]
 
 [sub_resource type="Resource" id="Resource_qrc5w"]
-resource_name = "Scale 0.5s"
+resource_name = "Scale 0.50s"
 script = ExtResource("2_emc38")
 transition = 7
 tween_property = 2
@@ -13,7 +13,7 @@ end_value = Vector2(1, 1)
 metadata/_custom_type_script = "uid://ddiy46s8pndwo"
 
 [sub_resource type="Resource" id="Resource_bunxy"]
-resource_name = "Alpha 0.3s"
+resource_name = "Alpha 0.30s"
 script = ExtResource("2_emc38")
 transition = 3
 duration = 0.3
