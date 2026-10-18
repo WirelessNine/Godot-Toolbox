@@ -62,14 +62,14 @@ const TYPE_DEFAULTS: Dictionary[PropertyType, Variant] = {
 ##The easing for the step
 @export var easing: Tween.EaseType = Tween.EASE_OUT
 ##The time it takes for the tweener to finish.
-@export_range(0.0, 10.0, 0.1) var duration: float = 0.5:
+@export_range(0.0, 10.0, 0.01) var duration: float = 0.5:
 	set(value):
 		duration = value
 		_update_resource_name()
 ##The delay before the step executes, pauses the entire execution.
-@export_range(0.0, 10.0, 0.1) var delay: float = 0.0
+@export_range(0.0, 10.0, 0.01) var delay: float = 0.0
 ##The delay before the tweener starts, does not pause execution.
-@export_range(0.0, 10.0, 0.1) var tweener_delay: float = 0.0
+@export_range(0.0, 10.0, 0.01) var tweener_delay: float = 0.0
 
 @export_group("Property")
 ##The property to tween.
@@ -240,4 +240,4 @@ func _set_color_values_default() -> void:
 func _update_resource_name() -> void:
 	var property: String = TweenProperty.keys()[tween_property].capitalize()
 
-	resource_name = "%s %.1fs" % [property, duration]
+	resource_name = "%s %.2fs" % [property, duration]
