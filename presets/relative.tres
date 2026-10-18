@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TweenPreset" format=3 uid="uid://3w441etipppa"]
+
+[ext_resource type="Script" uid="uid://cdo6h5x4glwop" path="res://addons/ui_expansion/objects/tween/tween_preset.gd" id="1_2rjir"]
+[ext_resource type="Script" uid="uid://ddiy46s8pndwo" path="res://addons/ui_expansion/objects/tween/tween_step.gd" id="2_3s3x6"]
+
+[sub_resource type="Resource" id="Resource_15bg5"]
+resource_name = "Shader"
+script = ExtResource("2_3s3x6")
+tween_property = 6
+custom_property = "dissolve_value"
+property_type = 3
+start_value = 0.0
+end_value = 1.0
+metadata/_custom_type_script = "uid://ddiy46s8pndwo"
+
+[resource]
+script = ExtResource("1_2rjir")
+steps = Array[ExtResource("2_3s3x6")]([SubResource("Resource_15bg5")])
+metadata/_custom_type_script = "uid://cdo6h5x4glwop"

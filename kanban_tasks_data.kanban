@@ -31,7 +31,7 @@
 	"tasks": [
 		{
 			"uuid": "c60f59a0-43c7-4d1e-8ea3-185443a114f3",
-			"title": "Rework UIAnimation",
+			"title": "Add Tween anim system",
 			"description": "",
 			"category": "b4928ccb-ed64-4884-bcc7-1395c2abd826",
 			"steps": []

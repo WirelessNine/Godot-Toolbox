@@ -7,19 +7,17 @@ signal opened
 ##Emitted when the menu is closed.
 signal closed
 
-@export_group("Animation", "animation_")
-##The [GDScript] object containing static functions for playing animations.
-@export var animation_pack: GDScript
-##The static method from [member animation_pack] to play animation for the menu.
-@export var animation_method: int
+@export_group("Animation")
+##The tween preset that plays the animation.
+@export var preset: TweenPreset
 ##If [code]true[/code], the state can be overriden while the animation is playing.
-@export var animation_can_override: bool = true
+@export var can_override: bool = true
 
 @export_group("")
 ##If [code]true[/code], the menu is added to the Menu stack.
 @export var add_to_stack: bool = true
-##If [code]true[/code], the background is moved to behind the menu when opened,
-##if a background is defined.
+##If [code]true[/code], the background is moved to behind the menu when opened. [br]
+##[note]: A background node must me assigned in the MenuManager.
 @export var move_background: bool = false
 ##If [code]true[/code], the menu is starts closed.
 @export var start_closed: bool = false
@@ -42,8 +40,9 @@ func open() -> void:
 		return
 
 	state = true
-
-	#UIAnimation.play_animation(animation_type, self, false)
+	
+	_play_tween(false)
+	
 	if add_to_stack:
 		MenuManager.add_to_stack(self)
 
@@ -57,8 +56,9 @@ func close() -> void:
 		return
 
 	state = false
-
-	#UIAnimation.play_animation(animation_type, self, true)
+	
+	_play_tween(true)
+	
 	if add_to_stack:
 		MenuManager.remove_from_stack(self)
 
@@ -75,7 +75,8 @@ func toggle() -> void:
 
 
 func _internal_ready() -> void:
-	visible = not start_closed
+	_play_tween(start_closed, true)
+	
 	state = not start_closed
 
 	tree_entered.connect(_internal_enter_tree)
@@ -91,9 +92,19 @@ func _internal_exit_tree() -> void:
 
 
 func _can_play() -> bool:
-	if not animation_can_override:
+	if not can_override and TweenPreset.is_playing(self):
 		return false
 	return true
+
+
+func _play_tween(reverse: bool, instant: bool = false) -> void:
+	if preset:
+		if instant:
+			preset.instant(self, reverse)
+		else:
+			preset.play(self, reverse)
+	else:
+		visible = not reverse
 
 
 ##Called when the menu is opened.
@@ -104,9 +115,3 @@ func _opened() -> void:
 ##Called when the menu is closed.
 func _closed() -> void:
 	pass
-
-
-func _is_playing() -> bool:
-	if not animation_pack == null:
-		return false
-	return false

@@ -2,11 +2,9 @@
 <svg
    width="16"
    height="16"
-   fill="none"
-   viewBox="0 0 16 16"
    version="1.1"
    id="svg1"
-   sodipodi:docname="animation_utils.svg"
+   sodipodi:docname="tween_handler.svg"
    inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -32,13 +30,9 @@
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg1" />
-  <g
-     fill="#e0e0e0"
-     id="g1"
-     style="fill:#ffffff;fill-opacity:1">
-    <path
-       d="M11.647 6.354 3 15l-2-2 8.646-8.646zM13.269 10.308 15 11l-1.731.691L12.5 14l-.77-2.309L10 11l1.73-.692L12.5 8zM4 5h1v1H4v1H3V6H2V5h1V4h1zM15 3l-2.646 2.646-2-2L13 1zM7 2h1v1H7v1H6V3H5V2h1V1h1z"
-       id="path1"
-       style="fill:#ffffff;fill-opacity:1" />
-  </g>
+  <path
+     fill="#c38ef1"
+     d="m7 1v2h6v6h2v-8zm-1 4 1.793 1.793-4.793 4.793v-4.5859h-2v8h8v-2h-4.5859l4.793-4.793 1.793 1.793v-5h-5z"
+     id="path1"
+     style="fill:#e0e0e0;fill-opacity:1" />
 </svg>

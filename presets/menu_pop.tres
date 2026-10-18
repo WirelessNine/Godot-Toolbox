@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="TweenPreset" format=3 uid="uid://bwhwafmbjoxqd"]
+
+[ext_resource type="Script" uid="uid://cdo6h5x4glwop" path="res://addons/ui_expansion/objects/tween/tween_preset.gd" id="1_o0xsj"]
+[ext_resource type="Script" uid="uid://ddiy46s8pndwo" path="res://addons/ui_expansion/objects/tween/tween_step.gd" id="2_emc38"]
+
+[sub_resource type="Resource" id="Resource_qrc5w"]
+resource_name = "Scale 0.5s"
+script = ExtResource("2_emc38")
+transition = 7
+tween_property = 2
+start_value = Vector2(1.2, 1.2)
+end_value = Vector2(1, 1)
+metadata/_custom_type_script = "uid://ddiy46s8pndwo"
+
+[sub_resource type="Resource" id="Resource_bunxy"]
+resource_name = "Alpha 0.3s"
+script = ExtResource("2_emc38")
+transition = 3
+duration = 0.3
+tween_property = 5
+start_value = 0.0
+end_value = 1.0
+metadata/_custom_type_script = "uid://ddiy46s8pndwo"
+
+[resource]
+script = ExtResource("1_o0xsj")
+steps = Array[ExtResource("2_emc38")]([SubResource("Resource_qrc5w"), SubResource("Resource_qrc5w"), SubResource("Resource_bunxy")])
+show_on_start = true
+hide_on_finish = true
+metadata/_custom_type_script = "uid://cdo6h5x4glwop"

@@ -24,7 +24,7 @@ func _enter_tree() -> void:
 	audio_main_screen = AUDIO_MAIN_SCREEN.instantiate()
 	audio_main_screen.setup()
 	EditorInterface.get_editor_main_screen().add_child(audio_main_screen)
-
+	
 	_make_visible(false)
 
 

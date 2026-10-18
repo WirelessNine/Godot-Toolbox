@@ -26,7 +26,6 @@ gdscript/warnings/directory_rules={
 "res://addons/kanban_tasks": 0
 }
 gdscript/warnings/untyped_declaration=2
-gdscript/warnings/inferred_declaration=2
 
 [display]
 
@@ -55,4 +54,4 @@ rendering_device/driver.windows="d3d12"
 
 [wireless_nine]
 
-library_path="C:\\Users\\costa\\Music\\SFX"
+presets_folder_path="res://presets"

@@ -1,7 +1,10 @@
 extends Control
 
-@export var pack: GDScript
+const TWEEN_PRESET: TweenPreset = preload("uid://bwhwafmbjoxqd")
+const RELATIVE_PRESET = preload("uid://3w441etipppa")
+
+@onready var menu: Menu = $Menu
 
 
-func _ready() -> void:
-	pass
+func _on_play_pressed() -> void:
+	menu.toggle()
