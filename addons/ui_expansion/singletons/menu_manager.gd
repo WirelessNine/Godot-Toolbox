@@ -67,12 +67,15 @@ func add_to_stack(menu: Menu) -> void:
 ##Removes [param menu] to the stack.
 ##If [param erase_only], the menu is only removed from the stack.
 func remove_from_stack(menu: Menu) -> void:
+	var menu_index: int = _stack.find(menu)
+	var last_index: int = _stack.size() - 1
+	
 	_stack.erase(menu)
-
-	if not _stack.find(menu) == _stack.size() - 1:
-		return
-
 	menu.z_index = 0
+
+	if not menu_index == last_index:
+		return
+	
 	move_background(_stack.back() if not _stack.is_empty() else null)
 
 
@@ -94,7 +97,7 @@ func set_background(new_background: Control) -> void:
 func move_background(menu: Menu) -> void:
 	if background == null:
 		return
-
+	
 	if menu == null or not menu.move_background:
 		background.hide()
 		return
