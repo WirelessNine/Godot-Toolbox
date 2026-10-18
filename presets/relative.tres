@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://ddiy46s8pndwo" path="res://addons/ui_expansion/objects/tween/tween_step.gd" id="2_3s3x6"]
 
 [sub_resource type="Resource" id="Resource_15bg5"]
-resource_name = "Shader"
+resource_name = "Shader 0.5s"
 script = ExtResource("2_3s3x6")
 tween_property = 6
 custom_property = "dissolve_value"

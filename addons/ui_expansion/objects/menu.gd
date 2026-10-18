@@ -25,8 +25,8 @@ signal closed
 var state: bool = false
 
 
-func _ready() -> void:
-	_internal_ready()
+func _init() -> void:
+	_internal_init()
 
 
 ##Returns [code]true[/code] if the menu is open.
@@ -40,9 +40,9 @@ func open() -> void:
 		return
 
 	state = true
-	
+
 	_play_tween(false)
-	
+
 	if add_to_stack:
 		MenuManager.add_to_stack(self)
 
@@ -56,9 +56,9 @@ func close() -> void:
 		return
 
 	state = false
-	
+
 	_play_tween(true)
-	
+
 	if add_to_stack:
 		MenuManager.remove_from_stack(self)
 
@@ -74,13 +74,16 @@ func toggle() -> void:
 		open()
 
 
-func _internal_ready() -> void:
-	_play_tween(start_closed, true)
-	
-	state = not start_closed
-
+func _internal_init() -> void:
+	ready.connect(_internal_ready)
 	tree_entered.connect(_internal_enter_tree)
 	tree_exited.connect(_internal_exit_tree)
+
+
+func _internal_ready() -> void:
+	_play_tween(start_closed, true)
+
+	state = not start_closed
 
 
 func _internal_enter_tree() -> void:
