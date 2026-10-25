@@ -6,7 +6,7 @@
    viewBox="0 0 16 16"
    version="1.1"
    id="svg1"
-   sodipodi:docname="object_pool.svg"
+   sodipodi:docname="scene_pool.svg"
    inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -35,10 +35,10 @@
   <g
      fill="#e0e0e0"
      id="g1"
-     style="fill:#ffffff;fill-opacity:1">
+     style="fill:#e0e0e0;fill-opacity:1">
     <path
        d="M1 2a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3H1zM14 14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6h12zM6 7a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2z"
        id="path1"
-       style="fill:#ffffff;fill-opacity:1" />
+       style="fill:#e0e0e0;fill-opacity:1" />
   </g>
 </svg>
