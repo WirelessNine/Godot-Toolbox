@@ -3,6 +3,9 @@ class_name ScenePool
 extends RefCounted
 ##Container for a pool of scenes.
 
+##Emitted if a new scene is created when requesting or updating.
+signal scene_created
+
 ##Defines how the pool is accessed and managed.
 enum AccessMode {
 	##Nodes are taken and returned from the [member pool] individually, when needed.
@@ -102,6 +105,9 @@ func request_scene() -> Node:
 
 		scene_index = pool.size() - 1
 		scene = pool[scene_index]
+
+		scene_created.emit()
+
 	else:
 		var pool_range: Array[int]
 		var pool_size: int = pool.size()
@@ -166,8 +172,11 @@ func update_scenes(array: Array, method: Callable) -> void:
 	var array_size: int = array.size()
 	var pool_size: int = pool.size()
 
+	var new_scenes_created: bool = false
+
 	if array_size > pool_size:
 		create_scene(array_size - pool_size)
+		new_scenes_created = true
 	elif array_size < pool_size:
 		for x: int in range(array_size, pool_size):
 			_call_action_method(ActionMode.RETURNED, pool[x])
@@ -179,6 +188,9 @@ func update_scenes(array: Array, method: Callable) -> void:
 		_call_action_method(ActionMode.REQUESTED, scene)
 
 		method.call(scene, item)
+
+	if new_scenes_created:
+		scene_created.emit()
 
 
 ##Returns [code]true[/code] if no scenes can be instantiated anymore.
