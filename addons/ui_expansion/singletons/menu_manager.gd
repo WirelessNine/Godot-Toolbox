@@ -54,6 +54,15 @@ func close_menu(menu_name: String) -> void:
 	_active_menus[menu_name].close()
 
 
+##Returns the [Menu] whose [param menu_name] matches.
+func get_menu(menu_name: String) -> Menu:
+	if not menu_name in _active_menus:
+		push_error(menu_name, " does not exist!")
+		return
+
+	return _active_menus[menu_name]
+
+
 ##Adds [param menu] to the stack.
 func add_to_stack(menu: Menu) -> void:
 	_stack.append(menu)
