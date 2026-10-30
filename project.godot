@@ -17,7 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-MenuManager="*res://addons/ui_expansion/singletons/menu_manager.gd"
+MenuManager="*uid://yt4k544va37f"
 
 [debug]
 
@@ -35,7 +35,7 @@ window/size/mode=2
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/GDQuest_GDScript_formatter/plugin.cfg", "res://addons/kanban_tasks/plugin.cfg", "res://addons/registry/plugin.cfg")
+enabled=PackedStringArray("res://addons/GDQuest_GDScript_formatter/plugin.cfg", "res://addons/kanban_tasks/plugin.cfg", "res://addons/registry/plugin.cfg", "res://addons/scene_pool/plugin.cfg", "res://addons/ui_expansion/plugin.cfg")
 
 [file_customization]
 

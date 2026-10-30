@@ -1,9 +1,16 @@
 extends Node
 
+##If [code]true[/code], the background will move above the menu.
+var change_background_order: bool
+
 var _active_menus: Dictionary[String, Menu]
 var _stack: Array[Menu]
 
-var background: Control
+var _background: Control
+var _bg_parent: Node
+var _bg_preset: TweenPreset
+
+var _is_bg_visible: bool = false
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -29,15 +36,6 @@ func remove_menu(menu: Menu) -> void:
 	remove_from_stack(menu)
 
 
-##Returns the [Menu] whose [param menu_name] matches.
-func get_menu(menu_name: String) -> Menu:
-	if not menu_name in _active_menus:
-		push_error(menu_name, " does not exist!")
-		return
-
-	return _active_menus[menu_name]
-
-
 ##Opens the [Menu] whose [param menu_name] matches.
 func open_menu(menu_name: String) -> void:
 	if not menu_name in _active_menus:
@@ -60,7 +58,6 @@ func close_menu(menu_name: String) -> void:
 func add_to_stack(menu: Menu) -> void:
 	_stack.append(menu)
 
-	menu.z_index = _stack.size()
 	move_background(menu)
 
 
@@ -69,13 +66,12 @@ func add_to_stack(menu: Menu) -> void:
 func remove_from_stack(menu: Menu) -> void:
 	var menu_index: int = _stack.find(menu)
 	var last_index: int = _stack.size() - 1
-	
+
 	_stack.erase(menu)
-	menu.z_index = 0
 
 	if not menu_index == last_index:
 		return
-	
+
 	move_background(_stack.back() if not _stack.is_empty() else null)
 
 
@@ -84,23 +80,54 @@ func is_stack_empty() -> bool:
 	return _stack.is_empty()
 
 
-##Sets [member background] to [param new_background].
+##Sets background to [param new_background].
 func set_background(new_background: Control) -> void:
-	background = new_background
+	_background = new_background
+	_bg_parent = new_background.get_parent()
+
+	_bg_parent.move_child(_background, 0)
 
 	new_background.hide()
-	new_background.z_index = -1
 
 
-##Moves the [member background] behind [param menu].
+##Sets background tween preset to [param preset].
+func set_background_preset(new_preset: TweenPreset) -> void:
+	_bg_preset = new_preset
+
+
+##Moves the background behind [param menu].
 ##If no backgrond is defined, nothing happens.
 func move_background(menu: Menu) -> void:
-	if background == null:
-		return
-	
-	if menu == null or not menu.move_background:
-		background.hide()
+	if _background == null:
 		return
 
-	background.z_index = menu.z_index
-	background.show()
+	if menu == null or not menu.move_background:
+		_toggle_background(false)
+		return
+
+	var menu_parent: Node = menu.get_parent()
+
+	if not _bg_parent == menu_parent:
+		_background.reparent(menu_parent)
+
+	var menu_index: int = menu.get_index()
+
+	if _background.get_index() < menu_index:
+		menu_index -= 1
+
+	#menu_parent.move_child(_background, 0)
+	menu_parent.move_child(_background, menu_index)
+
+	_toggle_background(true)
+
+
+func _toggle_background(visible: bool) -> void:
+	if visible == _is_bg_visible:
+		return
+
+	if _bg_preset == null:
+		_background.visible = visible
+	else:
+		_bg_preset.play(_background, not visible)
+
+	_is_bg_visible = visible

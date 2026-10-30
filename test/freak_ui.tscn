@@ -36,6 +36,15 @@ offset_bottom = 440.0
 action_mode = 0
 text = "PLay Animation"
 
+[node name="BG" type="ColorRect" parent="." unique_id=683468523]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.2901961)
+
 [node name="Menu" type="PanelContainer" parent="." unique_id=1902547799]
 layout_mode = 1
 anchors_preset = 8
@@ -43,16 +52,42 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -194.0
-offset_top = -104.0
-offset_right = 194.0
-offset_bottom = 104.0
+offset_left = -286.0
+offset_top = -127.0
+offset_right = 286.0
+offset_bottom = 127.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_15bg5")
 script = ExtResource("2_qn3ew")
 preset = ExtResource("3_15bg5")
+move_background = true
+start_closed = true
+metadata/_custom_type_script = "uid://rxwty6cd03ab"
+
+[node name="play2" type="Button" parent="Menu" unique_id=1233715541]
+layout_mode = 2
+size_flags_vertical = 8
+action_mode = 0
+text = "PLay Animation"
+
+[node name="Menu2" type="PanelContainer" parent="." unique_id=336252858]
+custom_minimum_size = Vector2(92.77, 69.51)
+layout_mode = 0
+offset_left = 433.0
+offset_top = 235.0
+offset_right = 525.77
+offset_bottom = 304.51
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_15bg5")
+script = ExtResource("2_qn3ew")
+preset = ExtResource("3_15bg5")
+move_background = true
 start_closed = true
 metadata/_custom_type_script = "uid://rxwty6cd03ab"
 
 [connection signal="pressed" from="play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Menu/play2" to="." method="_on_play_2_pressed"]
