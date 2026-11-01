@@ -5,6 +5,11 @@ extends RefCounted
 
 ##Emitted if a new scene is created when requesting or updating.
 signal scene_created
+##Emitted if a new scene is created when requested. Only works with access mode [b]Dynamic[/b].
+signal scene_requested(node: Node)
+##Emitted if a new scene is created when returned. Only works with access mode [b]Dynamic[/b].
+signal scene_returned(node: Node)
+
 
 ##Defines how the pool is accessed and managed.
 enum AccessMode {
@@ -14,13 +19,6 @@ enum AccessMode {
 	BATCHED,
 }
 
-##Defines modes for a scene.
-enum ActionMode {
-	CREATED,
-	REQUESTED,
-	RETURNED,
-}
-
 ##The pool access mode.
 var access_mode: AccessMode = AccessMode.DYNAMIC
 ##The packed scene instantiated for in the pool.
@@ -28,8 +26,12 @@ var packed_scene: PackedScene
 ##The parent node of all scenes created.
 var parent: Node
 
-##[Callable] called for various actions on a scene.
-var action_method: Callable
+##[Callable] called when a scene is instantiated.
+var on_created: Callable
+##[Callable] called when a scene is requested.
+var on_requested: Callable
+##[Callable] called when a scene is returned.
+var on_returned: Callable
 
 ##The max number of scenes that can exist in the pool.
 var max_scenes: int = -1
@@ -49,14 +51,18 @@ func _init(
 	p_parent: Node,
 	p_max_scenes: int = -1,
 	p_start_scenes: int = 0,
-	p_action_method: Callable = _default_action_method,
+	p_on_created: Callable = _on_returned,
+	p_on_requested: Callable = _on_requested,
+	p_on_returned: Callable = _on_returned,
 ) -> void:
 	access_mode = p_access_mode
 	packed_scene = p_packed_scene
 	parent = p_parent
 	max_scenes = p_max_scenes
 
-	action_method = p_action_method
+	on_created = p_on_created
+	on_requested = p_on_requested
+	on_returned = p_on_returned
 
 	create_scene(p_start_scenes)
 
@@ -78,6 +84,9 @@ func create_scene(instances: int) -> void:
 	else:
 		max_instances = min(instances, max_scenes - pool_size)
 
+	if max_instances <= 0:
+		return
+
 	if max_instances == 1:
 		pool.append(_instantiate_scene())
 	else:
@@ -86,6 +95,8 @@ func create_scene(instances: int) -> void:
 		for x: int in range(pool_size, pool_size + max_instances):
 			pool[x] = _instantiate_scene()
 
+	scene_created.emit()
+
 
 ##Requests a single scene from the [member pool] and returns it if possible. Only for Dynamic access mode.
 func request_scene() -> Node:
@@ -93,20 +104,18 @@ func request_scene() -> Node:
 		push_error("access_mode is not DYNAMIC!")
 		return null
 
-	var scene: Node = null
-	var scene_index: int = -1
+	var node: Node = null
+	var node_index: int = -1
 
 	if is_pool_exhausted():
 		if is_pool_full():
 			push_warning(self, ": Pool is exhausted and full!")
-			return scene
+			return node
 
 		create_scene(1)
 
-		scene_index = pool.size() - 1
-		scene = pool[scene_index]
-
-		scene_created.emit()
+		node_index = pool.size() - 1
+		node = pool[node_index]
 
 	else:
 		var pool_range: Array[int]
@@ -125,44 +134,49 @@ func request_scene() -> Node:
 			if item == null or item in _active:
 				continue
 
-			scene = item
-			scene_index = x
+			node = item
+			node_index = x
 
 			break
 
-	if scene == null:
-		push_error(self, ": Failed to find requested scene.")
+	if node == null:
+		push_error(self, ": Failed to find a scene.")
+		return null
 
-	pool[scene_index] = null
-	_active[scene] = scene_index
+	pool[node_index] = null
+	_active[node] = node_index
 
-	_call_action_method(ActionMode.REQUESTED, scene)
+	on_requested.call(node)
 
-	return scene
+	scene_requested.emit(node)
+
+	return node
 
 
-##Returns the [param scene] back to the [member pool]. Only for Dynamic access mode.
-func return_scene(scene: Node) -> void:
-	if scene == null:
+##Returns the [param node] back to the [member pool]. Only for Dynamic access mode.
+func return_scene(node: Node) -> void:
+	if node == null:
 		return
 
 	if not access_mode == AccessMode.DYNAMIC:
 		push_error("access_mode is not DYNAMIC!")
 		return
 
-	if not scene in _active:
-		push_error(scene, " is not active or part of the pool!")
+	if not node in _active:
+		push_error(node, " is not active or part of the pool!")
 		return
 
-	var index: int = _active[scene]
+	var index: int = _active[node]
 
-	pool[index] = scene
-	_active.erase(scene)
+	pool[index] = node
+	_active.erase(node)
 
-	_call_action_method(ActionMode.RETURNED, scene)
+	on_returned.call(node)
+
+	scene_returned.emit(node)
 
 
-##Calls the [param method] for each scene from the pool, with items from the [param array].[br]
+##Calls the [param method] for each scene in the pool, with items from the [param array].[br]
 ##The first parameter should be the scene/node, and the second one the item from the [param array].
 func update_scenes(array: Array, method: Callable) -> void:
 	if not access_mode == AccessMode.BATCHED:
@@ -172,25 +186,19 @@ func update_scenes(array: Array, method: Callable) -> void:
 	var array_size: int = array.size()
 	var pool_size: int = pool.size()
 
-	var new_scenes_created: bool = false
-
 	if array_size > pool_size:
 		create_scene(array_size - pool_size)
-		new_scenes_created = true
 	elif array_size < pool_size:
 		for x: int in range(array_size, pool_size):
-			_call_action_method(ActionMode.RETURNED, pool[x])
+			on_returned.call(pool[x])
 
 	for x: int in array_size:
 		var item: Variant = array[x]
-		var scene: Node = pool[x]
+		var node: Node = pool[x]
 
-		_call_action_method(ActionMode.REQUESTED, scene)
+		on_requested.call(node)
 
-		method.call(scene, item)
-
-	if new_scenes_created:
-		scene_created.emit()
+		method.call(node, item)
 
 
 ##Returns [code]true[/code] if no scenes can be instantiated anymore.
@@ -206,27 +214,20 @@ func is_pool_exhausted() -> bool:
 	return pool.size() == _active.size()
 
 
-func _default_action_method(action_mode: ActionMode, scene: Node) -> void:
-	match action_mode:
-		ActionMode.CREATED:
-			if scene is CanvasItem:
-				scene.hide()
-		ActionMode.REQUESTED:
-			if scene is CanvasItem:
-				scene.show()
-		ActionMode.RETURNED:
-			if scene is CanvasItem:
-				scene.hide()
+func _on_requested(node: Node) -> void:
+	if node is CanvasItem:
+		node.show()
+
+
+func _on_returned(node: Node) -> void:
+	if node is CanvasItem:
+		node.hide()
 
 
 func _instantiate_scene() -> Node:
-	var scene: Node = packed_scene.instantiate()
-	parent.add_child(scene)
+	var node: Node = packed_scene.instantiate()
+	parent.add_child(node)
 
-	_call_action_method(ActionMode.CREATED, scene)
+	on_created.call(node)
 
-	return scene
-
-
-func _call_action_method(mode: ActionMode, scene: Node) -> void:
-	action_method.call(mode, scene)
+	return node

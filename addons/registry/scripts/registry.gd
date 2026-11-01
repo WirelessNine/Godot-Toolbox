@@ -13,40 +13,65 @@ static func create_collection(name: String, type: StringName, path: String) -> C
 		push_error("Path: ", path, " doesn't exist")
 		return null
 
-	if name in _collections:
-		push_error(name, " already exists.")
-		return null
+	var name_snake_case: String = name.to_snake_case()
 
-	var array: Array
+	if name_snake_case in _collections:
+		return _collections[name_snake_case]
+
+	var array: Array[Resource]
 
 	_load_resources_into(array, type, path)
 
-	var collection := Collection.new(array, name, path, type)
+	var collection := Collection.new(array, name_snake_case, path, type)
 
-	_collections[name] = collection
+	_collections[name_snake_case] = collection
 
 	return collection
 
 
+##Creates multiple [Registry.Collection]s with [param path]'s subfolders name and items, and [param type].
+static func create_multi_collection(type: StringName, path: String) -> void:
+	if not DirAccess.dir_exists_absolute(path):
+		push_error("Path: ", path, " doesn't exist")
+		return
+
+	var folders: PackedStringArray = ResourceLoader.list_directory(path)
+
+	for x: String in folders:
+		if not x.ends_with("/"):
+			continue
+
+		var folder_name: String = x.trim_suffix("/")
+		var subfolder_path: String = path.path_join(folder_name)
+
+		create_collection(folder_name, type, subfolder_path)
+
+
 ##Clears and reloads the resources in the [param collection].
 static func refresh_collection(collection: Collection) -> void:
-	collection.items.clear()
+	var array: Array[Resource]
 
-	_load_resources_into(collection.items, collection.type, collection.path)
+	_load_resources_into(array, collection.type, collection.path)
+
+	collection.set_items(array)
 
 
 ##Returns the [Registry.Collection] with the matching [param name].
 static func get_collection(name: String) -> Collection:
-	if not name in _collections:
-		push_error(name, " doesn't exists.")
+	var name_snake_case: String = name.to_snake_case()
+
+	if not name_snake_case in _collections:
+		push_error(name_snake_case, " doesn't exists.")
 		return null
 
-	return _collections[name]
+	return _collections[name_snake_case]
 
 
 ##Returns [code]true[/code] if a collection with the matching [param name] exists.
-func has_collection(name: String) -> bool:
-	return name in _collections
+static func has_collection(name: String) -> bool:
+	var name_snake_case: String = name.to_snake_case()
+
+	return name_snake_case in _collections
 
 
 ##Removes the [param collection] from the registry.
@@ -83,7 +108,7 @@ static func _matches_class(resource: Resource, type: StringName) -> bool:
 ##Container of resources.
 class Collection:
 	##[Array] of items stored in the collection.
-	var items: Array
+	var items: Array[Resource]
 	##The collection's name.
 	var name: String
 	##The path where the collection's items are stored.
@@ -91,27 +116,45 @@ class Collection:
 	##The type of the items stored.
 	var type: StringName
 
+	var _items_cache: Dictionary[String, Resource]
+
 
 	func _init(p_items: Array, p_name: String, p_path: String, p_type: StringName) -> void:
-		items.assign(p_items)
+		set_items(p_items)
 
 		name = p_name
 		path = p_path
 		type = p_type
 
 
+	func _to_string() -> String:
+		return "Collection: %s" % name
+
+
+	##Assigns [param new_items] to [member items].
+	func set_items(new_items: Array[Resource]) -> void:
+		items.assign(new_items)
+		_create_cache()
+
+
 	##Returns the item whose file name matches [param item_name], if it exists.
 	func get_item_name(item_name: String) -> Resource:
-		for x: Resource in items:
-			if x == null:
-				continue
+		var item: Resource = _items_cache.get(item_name)
 
-			if x.resource_path.get_file().get_basename() == item_name:
-				return x
+		if item == null:
+			push_error(item_name, "doesn't exist in ", self)
 
-		return null
+		return item
 
 
 	##Returns [code]true[/code] if an item whose file name matches [param item_name] exists.
 	func has_item(item_name: String) -> bool:
-		return not get_item_name(item_name) == null
+		return item_name in _items_cache
+
+
+	##Creates the name cache for items.
+	func _create_cache() -> void:
+		_items_cache.clear()
+
+		for x: Resource in items:
+			_items_cache[x.resource_path.get_file().get_basename()] = x

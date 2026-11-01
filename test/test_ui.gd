@@ -10,7 +10,7 @@ var pool: ScenePool
 
 
 func _ready() -> void:
-	pool = ScenePool.new(ScenePool.AccessMode.DYNAMIC, SLOT, grid, 8, 5, _custom_action)
+	pool = ScenePool.new(ScenePool.AccessMode.DYNAMIC, SLOT, grid, 8, 5)
 
 
 func update_slot(slot: Label, value: int) -> void:
@@ -33,18 +33,3 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			time = Time.get_ticks_usec()
 			pool.return_scene(scene)
 			prints("Return time:", Time.get_ticks_usec() - time)
-
-
-func _custom_action(mode: ScenePool.ActionMode, scene: Node) -> void:
-	match mode:
-		ScenePool.ActionMode.CREATED:
-			if scene is CanvasItem:
-				scene.hide()
-
-		ScenePool.ActionMode.RETURNED:
-			if scene is CanvasItem:
-				scene.hide()
-
-		ScenePool.ActionMode.REQUESTED:
-			if scene is CanvasItem:
-				scene.show()
