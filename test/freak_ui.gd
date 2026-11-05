@@ -6,9 +6,11 @@ const RELATIVE_PRESET = preload("uid://3w441etipppa")
 
 @onready var menu: Menu = $Menu
 @onready var menu_2: Menu = $Menu2
+@onready var hud: Menu = $HUD
 
 
 func _ready() -> void:
+	MenuManager.set_hud(hud)
 	MenuManager.set_background(bg)
 
 

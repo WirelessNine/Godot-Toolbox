@@ -18,15 +18,27 @@ signal closed
 @export var add_to_stack: bool = true
 ##If [code]true[/code], the background is moved to behind the menu when opened. [br]
 ##[note]: A background node must me assigned in the MenuManager.
-@export var move_background: bool = false
+@export var move_background: bool = true
+##If [code]true[/code], the menu will close the HUD assigned when opened.
+@export var close_hud: bool = true
 ##If [code]true[/code], the menu is starts closed.
 @export var start_closed: bool = false
 
 var state: bool = false
 
 
-func _init() -> void:
-	_internal_init()
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_READY:
+			_play_tween(start_closed, true)
+
+			state = not start_closed
+
+		NOTIFICATION_ENTER_TREE:
+			MenuManager.register_menu(self)
+
+		NOTIFICATION_EXIT_TREE:
+			MenuManager.unregister_menu(self)
 
 
 ##Returns [code]true[/code] if the menu is open.
@@ -72,26 +84,6 @@ func toggle() -> void:
 		close()
 	else:
 		open()
-
-
-func _internal_init() -> void:
-	ready.connect(_internal_ready)
-	tree_entered.connect(_internal_enter_tree)
-	tree_exited.connect(_internal_exit_tree)
-
-
-func _internal_ready() -> void:
-	_play_tween(start_closed, true)
-
-	state = not start_closed
-
-
-func _internal_enter_tree() -> void:
-	MenuManager.add_menu(self)
-
-
-func _internal_exit_tree() -> void:
-	MenuManager.remove_menu(self)
 
 
 func _can_play() -> bool:

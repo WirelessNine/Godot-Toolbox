@@ -109,7 +109,6 @@ func request_scene() -> Node:
 
 	if is_pool_exhausted():
 		if is_pool_full():
-			push_warning(self, ": Pool is exhausted and full!")
 			return node
 
 		create_scene(1)
