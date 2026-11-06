@@ -140,6 +140,17 @@ class Collection:
 		items.assign(new_items)
 
 
+	##Adds a new [param item] to [member items].
+	func add_item(item_name: String, item: Resource) -> void:
+		var snake_case_name: String = item_name.to_snake_case()
+
+		if snake_case_name in items:
+			push_error(snake_case_name, "already exist in ", self)
+			return
+
+		items[snake_case_name] = item
+
+
 	##Returns the item whose file name matches [param item_name], if it exists.
 	func get_item(item_name: String) -> Resource:
 		var snake_case_name: String = item_name.to_snake_case()
