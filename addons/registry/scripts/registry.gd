@@ -53,7 +53,7 @@ static func refresh_collection(collection: Collection) -> void:
 
 	_load_resources_into(array, collection.type, collection.path)
 
-	collection.set_items(array)
+	collection.assign_items(array)
 
 
 ##Returns the [Registry.Collection] with the matching [param name].
@@ -120,7 +120,7 @@ class Collection:
 
 
 	func _init(p_items: Array, p_name: String, p_path: String, p_type: StringName) -> void:
-		set_items(p_items)
+		assign_items(p_items)
 
 		name = p_name
 		path = p_path
@@ -132,24 +132,26 @@ class Collection:
 
 
 	##Assigns [param new_items] to [member items].
-	func set_items(new_items: Array[Resource]) -> void:
+	func assign_items(new_items: Array[Resource]) -> void:
 		items.assign(new_items)
 		_create_cache()
 
 
 	##Returns the item whose file name matches [param item_name], if it exists.
-	func get_item_name(item_name: String) -> Resource:
-		var item: Resource = _items_cache.get(item_name)
+	func get_item(item_name: String) -> Resource:
+		var snake_case_name: String = item_name.to_snake_case()
+		var item: Resource = _items_cache.get(snake_case_name)
 
 		if item == null:
-			push_error(item_name, "doesn't exist in ", self)
+			push_error(snake_case_name, "doesn't exist in ", self)
 
 		return item
 
 
 	##Returns [code]true[/code] if an item whose file name matches [param item_name] exists.
 	func has_item(item_name: String) -> bool:
-		return item_name in _items_cache
+		var snake_case_name: String = item_name.to_snake_case()
+		return snake_case_name in _items_cache
 
 
 	##Creates the name cache for items.
@@ -157,4 +159,4 @@ class Collection:
 		_items_cache.clear()
 
 		for x: Resource in items:
-			_items_cache[x.resource_path.get_file().get_basename()] = x
+			_items_cache[x.resource_path.get_file().get_basename().to_snake_case()] = x
