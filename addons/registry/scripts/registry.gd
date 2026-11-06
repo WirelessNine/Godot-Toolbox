@@ -18,11 +18,11 @@ static func create_collection(name: String, type: StringName, path: String) -> C
 	if name_snake_case in _collections:
 		return _collections[name_snake_case]
 
-	var array: Array[Resource]
+	var dictionary: Dictionary[String, Resource]
 
-	_load_resources_into(array, type, path)
+	_load_resources_into(dictionary, type, path)
 
-	var collection := Collection.new(array, name_snake_case, path, type)
+	var collection := Collection.new(dictionary, name_snake_case, path, type)
 
 	_collections[name_snake_case] = collection
 
@@ -49,11 +49,11 @@ static func create_multi_collection(type: StringName, path: String) -> void:
 
 ##Clears and reloads the resources in the [param collection].
 static func refresh_collection(collection: Collection) -> void:
-	var array: Array[Resource]
+	var dictionary: Dictionary[String, Resource]
 
-	_load_resources_into(array, collection.type, collection.path)
+	_load_resources_into(dictionary, collection.type, collection.path)
 
-	collection.assign_items(array)
+	collection.assign_items(dictionary)
 
 
 ##Returns the [Registry.Collection] with the matching [param name].
@@ -79,7 +79,11 @@ static func remove_collection(collection: Collection) -> void:
 	_collections.erase(collection.name)
 
 
-static func _load_resources_into(array: Array, type: StringName, path: String) -> void:
+static func _load_resources_into(
+	dictionary: Dictionary[String, Resource],
+	type: StringName,
+	path: String,
+) -> void:
 	var file_names: PackedStringArray = ResourceLoader.list_directory(path)
 
 	if file_names.is_empty():
@@ -89,12 +93,14 @@ static func _load_resources_into(array: Array, type: StringName, path: String) -
 		var full_path: String = path.path_join(x)
 
 		if x.ends_with("/"):
-			_load_resources_into(array, type, full_path.trim_suffix("/"))
+			_load_resources_into(dictionary, type, full_path.trim_suffix("/"))
 		elif x.get_extension() in EXTENSIONS:
 			var resource := load(full_path)
 
 			if resource and _matches_class(resource, type):
-				array.append(resource)
+				var resource_name: String = x.get_basename().to_snake_case()
+
+				dictionary[resource_name] = resource
 
 
 static func _matches_class(resource: Resource, type: StringName) -> bool:
@@ -108,7 +114,7 @@ static func _matches_class(resource: Resource, type: StringName) -> bool:
 ##Container of resources.
 class Collection:
 	##[Array] of items stored in the collection.
-	var items: Array[Resource]
+	var items: Dictionary[String, Resource]
 	##The collection's name.
 	var name: String
 	##The path where the collection's items are stored.
@@ -116,10 +122,8 @@ class Collection:
 	##The type of the items stored.
 	var type: StringName
 
-	var _items_cache: Dictionary[String, Resource]
 
-
-	func _init(p_items: Array, p_name: String, p_path: String, p_type: StringName) -> void:
+	func _init(p_items: Dictionary, p_name: String, p_path: String, p_type: StringName) -> void:
 		assign_items(p_items)
 
 		name = p_name
@@ -132,15 +136,14 @@ class Collection:
 
 
 	##Assigns [param new_items] to [member items].
-	func assign_items(new_items: Array[Resource]) -> void:
+	func assign_items(new_items: Dictionary[String, Resource]) -> void:
 		items.assign(new_items)
-		_create_cache()
 
 
 	##Returns the item whose file name matches [param item_name], if it exists.
 	func get_item(item_name: String) -> Resource:
 		var snake_case_name: String = item_name.to_snake_case()
-		var item: Resource = _items_cache.get(snake_case_name)
+		var item: Resource = items.get(snake_case_name)
 
 		if item == null:
 			push_error(snake_case_name, "doesn't exist in ", self)
@@ -151,12 +154,4 @@ class Collection:
 	##Returns [code]true[/code] if an item whose file name matches [param item_name] exists.
 	func has_item(item_name: String) -> bool:
 		var snake_case_name: String = item_name.to_snake_case()
-		return snake_case_name in _items_cache
-
-
-	##Creates the name cache for items.
-	func _create_cache() -> void:
-		_items_cache.clear()
-
-		for x: Resource in items:
-			_items_cache[x.resource_path.get_file().get_basename().to_snake_case()] = x
+		return snake_case_name in items
